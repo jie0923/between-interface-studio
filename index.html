@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Between Interface Studio | Turn feelings into interfaces</title>
+    <style>
+        :root {
+            /* Linear-inspired Warm Palette */
+            --bg: oklch(98.5% 0.008 75);
+            --surface: oklch(100% 0 0 / 0.5);
+            --surface-solid: oklch(100% 0 0);
+            --fg: oklch(15% 0.015 70);
+            --muted: oklch(50% 0.01 70);
+            --border: oklch(0% 0 0 / 0.06);
+            --border-hover: oklch(0% 0 0 / 0.12);
+            --accent: oklch(60% 0.15 35); /* Warm Rust/Accent */
+            
+            --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang TC', system-ui, sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang TC', system-ui, sans-serif;
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Fluid Background - Warmer & Brighter */
+        .fluid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            filter: blur(100px);
+            opacity: 0.8;
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        .fluid-blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: move 25s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: oklch(94% 0.05 60); /* Soft Peach */
+            top: -10%;
+            left: -10%;
+        }
+
+        .blob-2 {
+            width: 600px;
+            height: 600px;
+            background: oklch(96% 0.04 90); /* Soft Yellow */
+            bottom: -15%;
+            right: -10%;
+            animation-delay: -7s;
+        }
+
+        .blob-3 {
+            width: 400px;
+            height: 400px;
+            background: oklch(95% 0.03 40); /* Warm Rose */
+            top: 30%;
+            left: 40%;
+            animation-delay: -12s;
+        }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(80px, 40px) scale(1.15); }
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 440px;
+            min-height: 100vh;
+            padding: 0 24px 120px;
+            position: relative;
+        }
+
+        /* Glass / Card Styling */
+        .card {
+            background: var(--surface);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            letter-spacing: -0.04em;
+            font-weight: 600;
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            margin-bottom: 12px;
+            display: block;
+            font-weight: 600;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        /* Hero */
+        .hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .logo-mark {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            margin-bottom: 40px;
+            color: var(--fg);
+        }
+
+        .hero h1 {
+            font-size: 44px;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            color: var(--fg);
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--muted);
+            font-weight: 400;
+            max-width: 280px;
+        }
+
+        /* Why Me Section */
+        .why-me h2 {
+            font-size: 28px;
+            margin-bottom: 32px;
+        }
+
+        .why-me-item {
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .why-me-number {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            opacity: 0.6;
+            padding-top: 4px;
+        }
+
+        .why-me-content h3 {
+            font-size: 17px;
+            margin-bottom: 6px;
+        }
+
+        .why-me-content p {
+            font-size: 15px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* Services Grid - 2x2 */
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .service-card {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .service-icon {
+            margin-bottom: 16px;
+            color: var(--fg);
+            opacity: 0.8;
+        }
+
+        .service-card h3 {
+            font-size: 15px;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .service-card p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        /* Founder Story */
+        .founder-story {
+            border-top: 1px solid var(--border);
+            padding-top: 80px;
+        }
+
+        .founder-story h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .founder-story p {
+            font-size: 16px;
+            color: var(--fg);
+            opacity: 0.7;
+            margin-bottom: 24px;
+        }
+
+        /* Form Styling */
+        .form-container {
+            padding: 40px 0 100px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: oklch(100% 0 0 / 0.3);
+            font-family: var(--font-body);
+            font-size: 15px;
+            color: var(--fg);
+            transition: all 0.2s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--fg);
+            background: oklch(100% 0 0 / 0.8);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: var(--fg);
+            color: var(--bg);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Success State */
+        #success-state {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        /* Animations */
+        [data-animate] {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        [data-animate].visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* SVG Icons */
+        .icon {
+            width: 24px;
+            height: 24px;
+            stroke-width: 1.5;
+            stroke: currentColor;
+            fill: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="fluid-bg">
+        <div class="fluid-blob blob-1"></div>
+        <div class="fluid-blob blob-2"></div>
+        <div class="fluid-blob blob-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Hero -->
+        <header class="hero">
+            <div class="logo-mark">Between.</div>
+            <h1>Turn feelings into interfaces.</h1>
+            <p>將模糊的感受，轉化為直觀的數位互動。</p>
+        </header>
+
+        <!-- Founder Story -->
+        <section class="founder-story" data-animate>
+            <span class="eyebrow">The Translator</span>
+            <h2>站在技術與感受的交叉點</h2>
+            <p>我致力於成為 AI 與人之間的翻譯者，將模糊的人類情緒與靈感，轉化為具體的數位體驗。在 AI 時代，最稀缺的是能理解感性並將其精準譯成技術語言的能力。</p>
+        </section>
+
+        <!-- Why Choose Me -->
+        <section class="why-me" data-animate>
+            <span class="eyebrow">Why Between?</span>
+            <h2>為什麼選擇我們</h2>
+            
+            <div class="why-me-item">
+                <div class="why-me-number">01</div>
+                <div class="why-me-content">
+                    <h3>雙向語言能力</h3>
+                    <p>資工背景的理性骨架，結合 HCI (人機互動) 的感性視角，確保技術不只強大，更有溫度。</p>
+                </div>
+            </div>
+
+            <div class="why-me-item">
+                <div class="why-me-number">02</div>
+                <div class="why-me-content">
+                    <h3>極速共創循環</h3>
+                    <p>摒棄冗長的開發溝通。我們用幾天內的「可互動原型」代替簡報，讓想法在操作中被驗證。</p>
+                </div>
+            </div>
+
+            <div class="why-me-item">
+                <div class="why-me-number">03</div>
+                <div class="why-me-content">
+                    <h3>接住靈感的容器</h3>
+                    <p>我們擅長處理從 0 到 1 最模糊的階段，幫助創作者將碎片化的夢想具象化為產品雛形。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Grid -->
+        <section class="services" data-animate>
+            <span class="eyebrow">Services</span>
+            <div class="services-grid">
+                <div class="service-card card">
+                    <div class="service-icon">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3>共創工作坊</h3>
+                    <p>釐清 AI 在產品中的角色與人格。</p>
+                </div>
+                <div class="service-card card">
+                    <div class="service-icon">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <h3>極速原型</h3>
+                    <p>幾天內將想法轉化為互動 Web 雛形。</p>
+                </div>
+                <div class="service-card card">
+                    <div class="service-icon">
+                        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                    </div>
+                    <h3>互動顧問</h3>
+                    <p>優化 AI 的情緒節奏與介面體驗。</p>
+                </div>
+                <div class="service-card card">
+                    <div class="service-icon">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <h3>專屬方案</h3>
+                    <p>為獨特創意的量身打造實作途徑。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registration Form -->
+        <section class="form-container" data-animate>
+            <div id="form-content">
+                <span class="eyebrow">Contact</span>
+                <h2 style="margin-bottom: 24px;">預約你的翻譯者</h2>
+                <form id="booking-form">
+                    <div class="input-group">
+                        <label>姓名</label>
+                        <input type="text" name="name" placeholder="如何稱呼您？" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" name="email" placeholder="hello@example.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label>你想轉化的靈感片段</label>
+                        <textarea name="message" rows="4" placeholder="告訴我們您現在腦中那個模糊的想法..." required></textarea>
+                    </div>
+                    <button type="submit">遞交靈感</button>
+                </form>
+            </div>
+
+            <div id="success-state" class="card">
+                <h2 style="margin-bottom: 12px;">✨ 靈感已被接住</h2>
+                <p style="color: var(--muted); font-size: 15px;">我們即將與你一起轉化它。請留意收件匣，我們很快會聯繫你。</p>
+                <button onclick="location.reload()" style="margin-top: 24px; background: var(--border); color: var(--fg);">返回</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Form handling - To be implemented by Backend Agent
+        const form = document.getElementById('booking-form');
+        const formContent = document.getElementById('form-content');
+        const successState = document.getElementById('success-state');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    formContent.style.display = 'none';
+                    successState.style.display = 'block';
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.error || 'Something went wrong'}`);
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                alert('Failed to connect to the server.');
+            }
+        });
+
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
